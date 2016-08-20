@@ -8,5 +8,6 @@
     </string-array>
     <string name="pesquisar">Search</string>
     <string name="result"></string>
+    <string name="dica">Enter your text here</string>
     <string name="title_activity_tela_informacoes">More Info.</string>
 </resources>

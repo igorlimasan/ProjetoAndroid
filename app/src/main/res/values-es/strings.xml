@@ -2,11 +2,12 @@
     <string name="app_name">Ensayo n° 1: Ubicaciones</string>
     <string-array name="crit">
         <item>Nombre</item>
-        <item>Ubicacion</item>
+        <item>Ubicación</item>
         <item>Tipo</item>
         <item>Comidas</item>
     </string-array>
     <string name="pesquisar">Buscar</string>
     <string name="result"></string>
+    <string name="dica">Introduzca el texto aquí</string>
     <string name="title_activity_tela_informacoes">Mas Informaciones</string>
 </resources>
