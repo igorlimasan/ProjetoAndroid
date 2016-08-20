@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Test #1: Location</string>
+    <string-array name="crit">
+        <item>Name</item>
+        <item>Location</item>
+        <item>Type</item>
+        <item>Menu Item</item>
+    </string-array>
+    <string name="pesquisar">Search</string>
+    <string name="result"></string>
+    <string name="title_activity_tela_informacoes">More Info.</string>
+</resources>
