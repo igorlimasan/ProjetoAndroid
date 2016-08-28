@@ -37,8 +37,13 @@ public class telaPrincipal extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-       Intent myIntent = new Intent(this, telaInformacoes.class);
-        myIntent.putExtra("valor",local.get(0).toString());
+//       Intent myIntent = new Intent(this, telaInformacoes.class);
+//        myIntent.putExtra("valor",local.get(0).toString());
+//        this.startActivity(myIntent);
+
+        double [] dados = {-23.14426,-45.77867};
+        Intent myIntent = new Intent(this, telaMapa.class);
+        myIntent.putExtra("valor",dados);
         this.startActivity(myIntent);
 
 

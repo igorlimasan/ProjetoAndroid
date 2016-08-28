@@ -1,5 +1,6 @@
 package com.projeto.engsoft.projetoandroid;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -13,7 +14,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class telaMapa extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    private double lat;
+    private double longt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +24,11 @@ public class telaMapa extends FragmentActivity implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Intent intent = getIntent();
+        lat = intent.getDoubleArrayExtra("valor")[0];
+        longt = intent.getDoubleArrayExtra("valor")[1];
+
     }
 
 
@@ -39,8 +46,8 @@ public class telaMapa extends FragmentActivity implements OnMapReadyCallback {
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng casa = new LatLng(lat, longt);
+        mMap.addMarker(new MarkerOptions().position(casa).title("Teste Marcador Casa"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(casa));
     }
 }
