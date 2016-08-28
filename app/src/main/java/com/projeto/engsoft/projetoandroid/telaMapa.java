@@ -8,6 +8,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -48,6 +49,8 @@ public class telaMapa extends FragmentActivity implements OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         LatLng casa = new LatLng(lat, longt);
         mMap.addMarker(new MarkerOptions().position(casa).title("Teste Marcador Casa"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(casa));
+
+        CameraPosition update = new CameraPosition(casa,15,0,0);
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(update),3000,null);
     }
 }
