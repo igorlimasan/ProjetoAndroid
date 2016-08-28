@@ -9,5 +9,7 @@
     <string name="pesquisar">Pesquisar</string>
     <string name="result"></string>
     <string name="dica">Insira o texto aqui</string>
+    <string name="mapa">Ver no mapa</string>
     <string name="title_activity_tela_informacoes">Mais Informações</string>
+    <string name="title_activity_tela_mapa">Mapa</string>
 </resources>

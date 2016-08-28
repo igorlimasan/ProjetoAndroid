@@ -11,7 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import java.io.Serializable;
+
 public class telaInformacoes extends AppCompatActivity {
+    private Local loc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +26,22 @@ public class telaInformacoes extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        String res = intent.getStringExtra("valor");
+        loc = (Local) intent.getSerializableExtra("valor");
         TextView texto = (TextView) findViewById(R.id.resultText);
-        texto.setText(res);
+        texto.setText(loc.toString());
+    }
+
+    public void verMapa(View view) {
+        Intent myIntent = new Intent(this, telaMapa.class);
+        myIntent.putExtra("valor",loc);
+        this.startActivity(myIntent);
+
+//        double [] dados = {-23.14426,-45.77867};
+//        Intent myIntent = new Intent(this, telaMapa.class);
+//        myIntent.putExtra("valor",dados);
+//        this.startActivity(myIntent);
+
+
     }
 
 }

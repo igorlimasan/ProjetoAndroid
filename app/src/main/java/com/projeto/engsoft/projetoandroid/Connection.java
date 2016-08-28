@@ -30,7 +30,8 @@ public class Connection{
 
         //https://api.myjson.com/bins/3kpyw
         //http://api.flickr.com/services/feeds/photos_public.gne?tags=beatles&format=json&jsoncallback=?
-        String url = "https://api.myjson.com/bins/4aj31";
+        //String url = "https://api.myjson.com/bins/4aj31";
+        String url = "https://api.myjson.com/bins/4ag9o";
 
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -71,7 +72,7 @@ public class Connection{
 
             for (int i = 0; i < response.getJSONArray("locais").length(); i++) {
                 JSONObject obj = response.getJSONArray("locais").getJSONObject(i);
-                found.add(new Local(obj.getString("nome").toString(), obj.getString("tipo").toString(), toLista(obj.getJSONArray("comidas"))));
+            found.add(new Local(obj.getString("nome").toString(), obj.getString("tipo").toString(), toLista(obj.getJSONArray("comidas")),obj.getDouble("lat"),obj.getDouble("long")));
             }
 
         } catch (JSONException e) {
