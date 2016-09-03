@@ -3,51 +3,37 @@ package com.projeto.engsoft.projetoandroid;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Criteria;
-import android.location.GpsStatus;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.View;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.Console;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.security.Provider;
-import java.util.ArrayList;
-import java.util.List;
 
 public class telaMapa extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Local loc;
     private final String USER_AGENT = "Mozilla/5.0";
-    private MinhaLocalizacao ml;
+
 
 
     @Override
@@ -61,7 +47,7 @@ public class telaMapa extends FragmentActivity implements OnMapReadyCallback {
 
         Intent intent = getIntent();
         loc = (Local) intent.getSerializableExtra("valor");
-        //ml = new MinhaLocalizacao(this);
+        //ml = new GPS(this);
 
 
 
@@ -105,19 +91,93 @@ public class telaMapa extends FragmentActivity implements OnMapReadyCallback {
        }
              mMap.setMyLocationEnabled(true);
 
-//        GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
-//            @Override
-//            public void onMyLocationChange(Location location) {
-//                LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
-//                mMap.addMarker(new MarkerOptions().position(loc).title("Minha Posição"));
-//
-//            }
-//        };
-//        mMap.setOnMyLocationChangeListener(myLocationChangeListener);
+       /*GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+            @Override
+            public void onMyLocationChange(Location location) {
+                LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(loc).title("Minha Posição"));
+
+            }
+        };
+        mMap.setOnMyLocationChangeListener(myLocationChangeListener);*/
+
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            View v = getLayoutInflater().inflate(R.layout.info_mapa, null);
+
+            // Use default InfoWindow frame
+            @Override
+            public View getInfoWindow(Marker arg0) {
+
+
+                return null;
+            }
+
+            // Defines the contents of the InfoWindow
+            @Override
+            public View getInfoContents(Marker arg0) {
+
+                // Getting view from the layout file info_window_layout
+
+
+                // Getting the position from the marker
+                LatLng latLng = arg0.getPosition();
+
+                // Getting reference to the TextView to set latitude
+                TextView nome = (TextView) v.findViewById(R.id.nome);
+
+                // Getting reference to the TextView to set longitude
+                TextView endereco = (TextView) v.findViewById(R.id.endereco);
+
+                // Setting the latitude
+                nome.setText(loc.getNome());
+
+                // Setting the longitude
+                endereco.setText(loc.getEndereco());
+
+                // Returning the view containing InfoWindow contents
+                return v;
+
+            }
+        });
+
+        // Adding and showing marker while touching the GoogleMap
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng arg0) {
+                // Clears any existing markers from the GoogleMap
+
+
+            }
+        });
+
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            View v = getLayoutInflater().inflate(R.layout.info_mapa, null);
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                marker.showInfoWindow();
+                return true;
+            }
+        });
+
+
+
+
+
 
 
         LatLng mrk = new LatLng(loc.getLat(), loc.getLongt());
-        mMap.addMarker(new MarkerOptions().position(mrk).title(loc.getNome()));
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationListener gps = new GPS(mMap);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, gps);
+        mMap.addMarker(new MarkerOptions().position(mrk));
+
+
+
+
+
+
 
 
         CameraPosition update = new CameraPosition(mrk,15,0,0);

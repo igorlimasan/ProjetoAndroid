@@ -1,6 +1,7 @@
 package com.projeto.engsoft.projetoandroid;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,18 +13,19 @@ public class Local implements Serializable{
     private String nome;
     private String tipo;
     private List<String> comidas;
-
-
-
     private double lat;
     private double longt;
+    private String endereco;
 
-    public Local(String nome, String tipo, List<String> comidas, double lat, double longt) {
+
+    public Local(String nome, String tipo, List<String> comidas, double lat, double longt, String endereco) {
         this.nome = nome;
         this.tipo = tipo;
         this.comidas = comidas;
         this.lat = lat;
         this.longt = longt;
+        this.endereco = endereco;
+
     }
 
     public String getNome() {
@@ -41,6 +43,11 @@ public class Local implements Serializable{
     public double getLat() { return lat; }
 
     public double getLongt() {return longt; }
+
+    public String getEndereco() {return endereco;}
+
+
+
 
 
 

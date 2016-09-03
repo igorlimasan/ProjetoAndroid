@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ensayo n° 1: Ubicaciones</string>
+    <string name="app_name">Find a Food</string>
     <string-array name="crit">
         <item>Nombre</item>
         <item>Ubicación</item>

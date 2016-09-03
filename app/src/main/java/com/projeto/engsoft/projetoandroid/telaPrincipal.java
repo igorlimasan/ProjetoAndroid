@@ -5,6 +5,9 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +17,7 @@ public class telaPrincipal extends AppCompatActivity {
 
     private List<Local> local;
     private TextView textResult = null;
+    private ListView lv;
 
 
     @Override
@@ -34,13 +38,26 @@ public class telaPrincipal extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        lv=(ListView) findViewById(R.id.lista);
+        List<String> lista = Connection.getInstance().returnNames(local);
+        lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(),R.layout.texto_lista,lista));
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent myIntent = new Intent(telaPrincipal.this, telaInformacoes.class);
+                myIntent.putExtra("valor",local.get(position));
+                startActivity(myIntent);
+            }
+        });
+
+
 
     }
 
     public void onClick(View view) {
-          Intent myIntent = new Intent(this, telaInformacoes.class);
-          myIntent.putExtra("valor",local.get(0));
-          this.startActivity(myIntent);
+        Intent myIntent = new Intent(this, telaInformacoes.class);
+        myIntent.putExtra("valor",local.get(0));
+        this.startActivity(myIntent);
 
 //        double [] dados = {-23.14426,-45.77867};
 //        Intent myIntent = new Intent(this, telaMapa.class);
