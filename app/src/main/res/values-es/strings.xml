@@ -2,7 +2,6 @@
     <string name="app_name">Find a Food</string>
     <string-array name="crit">
         <item>Nombre</item>
-        <item>Ubicación</item>
         <item>Tipo</item>
         <item>Comidas</item>
     </string-array>

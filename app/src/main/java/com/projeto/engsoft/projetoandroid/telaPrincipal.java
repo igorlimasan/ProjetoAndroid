@@ -4,13 +4,17 @@ import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class telaPrincipal extends AppCompatActivity {
@@ -18,6 +22,8 @@ public class telaPrincipal extends AppCompatActivity {
     private List<Local> local;
     private TextView textResult = null;
     private ListView lv;
+    private Spinner spin;
+    private EditText texto;
 
 
     @Override
@@ -30,6 +36,9 @@ public class telaPrincipal extends AppCompatActivity {
 
         //textResult = (TextView) findViewById(R.id.result);
         final StringBuilder result = new StringBuilder();
+        spin = (Spinner) findViewById(R.id.criterios);
+        spin.requestFocus();
+        texto = (EditText) findViewById(R.id.valor);
 
 
         try {
@@ -55,9 +64,38 @@ public class telaPrincipal extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        Intent myIntent = new Intent(this, telaInformacoes.class);
-        myIntent.putExtra("valor",local.get(0));
-        this.startActivity(myIntent);
+        Local res = null;
+        List<Local> resL;
+        if(!TextUtils.isEmpty(texto.getText().toString()))
+        {
+            if(spin.getSelectedItemPosition() == 0)
+            {
+                res = new BuscaNome(local,texto.getText().toString()).busca();
+                if(res==null) Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
+                else
+                {
+                    Intent myIntent = new Intent(this, telaInformacoes.class);
+                    myIntent.putExtra("valor", res);
+                    this.startActivity(myIntent);
+                }
+            }
+
+            if(spin.getSelectedItemPosition() == 1)
+            {
+                resL = new BuscaTipo(local,texto.getText().toString()).busca();
+                if(resL.isEmpty()) Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
+                else
+                {
+                    Intent myIntent = new Intent(this, telaMapa.class);
+                    myIntent.putExtra("valor", resL.get(0));
+                    this.startActivity(myIntent);
+                }
+            }
+
+
+        }
+
+
 
 //        double [] dados = {-23.14426,-45.77867};
 //        Intent myIntent = new Intent(this, telaMapa.class);

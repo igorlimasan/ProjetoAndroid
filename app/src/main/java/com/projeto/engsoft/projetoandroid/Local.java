@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by Aluno on 15/08/2016.
@@ -61,5 +62,23 @@ public class Local implements Serializable{
         else if(loc.getLanguage().equals("es"))
             return  "Nombre: "+nome + "\nTipo: " + tipo + "\nComidas: " + comidas.toString().substring(1).replace(']',' ');
         return  "Name: "+nome + "\nType: " + tipo + "\nMenu Item: " + comidas.toString().substring(1).replace(']',' ');
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Local local = (Local) o;
+        return Double.compare(local.lat, lat) == 0 &&
+                Double.compare(local.longt, longt) == 0 &&
+                Objects.equals(nome, local.nome) &&
+                Objects.equals(tipo, local.tipo) &&
+                Objects.equals(comidas, local.comidas) &&
+                Objects.equals(endereco, local.endereco);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, tipo, comidas, lat, longt, endereco);
     }
 }
