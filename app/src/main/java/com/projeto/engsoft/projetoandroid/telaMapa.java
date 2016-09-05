@@ -141,15 +141,7 @@ public class telaMapa extends FragmentActivity implements OnMapReadyCallback {
         });
 
         // Adding and showing marker while touching the GoogleMap
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
-            @Override
-            public void onMapClick(LatLng arg0) {
-                // Clears any existing markers from the GoogleMap
-
-
-            }
-        });
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             View v = getLayoutInflater().inflate(R.layout.info_mapa, null);

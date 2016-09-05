@@ -71,7 +71,12 @@ public class telaPrincipal extends AppCompatActivity {
             if(spin.getSelectedItemPosition() == 0)
             {
                 res = new BuscaNome(local,texto.getText().toString()).busca();
-                if(res==null) Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
+                if(res==null)
+                {
+                    Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
+                    texto.setText("");
+                    texto.requestFocus();
+                }
                 else
                 {
                     Intent myIntent = new Intent(this, telaInformacoes.class);
@@ -83,7 +88,12 @@ public class telaPrincipal extends AppCompatActivity {
             if(spin.getSelectedItemPosition() == 1)
             {
                 resL = new BuscaTipo(local,texto.getText().toString()).busca();
-                if(resL.isEmpty()) Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
+                if(resL.isEmpty())
+                {
+                    Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
+                    texto.setText("");
+                    texto.requestFocus();
+                }
                 else
                 {
                     Intent myIntent = new Intent(this, telaMapa.class);
@@ -93,6 +103,11 @@ public class telaPrincipal extends AppCompatActivity {
             }
 
 
+        }
+        else
+        {
+            Toast.makeText(getApplicationContext(),"Digite um valor para pesquisa",Toast.LENGTH_SHORT);
+            texto.requestFocus();
         }
 
 
