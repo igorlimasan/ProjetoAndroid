@@ -106,7 +106,7 @@ public class telaPrincipal extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(getApplicationContext(),"Digite um valor para pesquisa",Toast.LENGTH_SHORT);
+            Toast.makeText(getApplicationContext(),"Digite um valor para pesquisa",Toast.LENGTH_SHORT).show();
             texto.requestFocus();
         }
 
