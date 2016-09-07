@@ -10,7 +10,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
-public class ListaEncontrados extends AppCompatActivity {
+public class TelaListaEncontrados extends AppCompatActivity {
     List<Local> found;
     ListView lv;
 
@@ -26,7 +26,7 @@ public class ListaEncontrados extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent myIntent = new Intent(ListaEncontrados.this, telaMapa.class);
+                Intent myIntent = new Intent(TelaListaEncontrados.this, TelaMapa.class);
                 myIntent.putExtra("valor",found.get(position));
                 startActivity(myIntent);
             }

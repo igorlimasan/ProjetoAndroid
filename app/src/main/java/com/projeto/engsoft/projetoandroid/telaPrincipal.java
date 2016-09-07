@@ -1,13 +1,13 @@
 package com.projeto.engsoft.projetoandroid;
 
+import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -18,7 +18,7 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.List;
 
-public class telaPrincipal extends AppCompatActivity {
+public class TelaPrincipal extends AppCompatActivity {
 
     private List<Local> local;
     private TextView textResult = null;
@@ -76,7 +76,7 @@ public class telaPrincipal extends AppCompatActivity {
                 }
                 else
                 {
-                    Intent myIntent = new Intent(this, telaInformacoes.class);
+                    Intent myIntent = new Intent(this, TelaInformacoes.class);
                     myIntent.putExtra("valor", res);
                     this.startActivity(myIntent);
                 }
@@ -93,7 +93,7 @@ public class telaPrincipal extends AppCompatActivity {
                 }
                 else
                 {
-                    Intent myIntent = new Intent(this, ListaEncontrados.class);
+                    Intent myIntent = new Intent(this, TelaListaEncontrados.class);
                     myIntent.putExtra("valor", (Serializable)resL);
                     this.startActivity(myIntent);
                 }
@@ -109,7 +109,7 @@ public class telaPrincipal extends AppCompatActivity {
                 }
                 else
                 {
-                    Intent myIntent = new Intent(this, ListaEncontrados.class);
+                    Intent myIntent = new Intent(this, TelaListaEncontrados.class);
                     myIntent.putExtra("valor", (Serializable)resL);
                     this.startActivity(myIntent);
                 }
@@ -128,10 +128,12 @@ public class telaPrincipal extends AppCompatActivity {
 
 
 //        double [] dados = {-23.14426,-45.77867};
-//        Intent myIntent = new Intent(this, telaMapa.class);
+//        Intent myIntent = new Intent(this, TelaMapa.class);
 //        myIntent.putExtra("valor",dados);
 //        this.startActivity(myIntent);
 
 
     }
+
+
 }
