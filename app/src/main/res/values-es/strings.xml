@@ -11,4 +11,5 @@
     <string name="mapa">Ver mapa</string>
     <string name="title_activity_tela_informacoes">Mas Informaciones</string>
     <string name="title_activity_tela_mapa">Mapa</string>
+    <string name="title_activity_lista_encontrados">Locais encontrados: </string>
 </resources>
