@@ -1,5 +1,6 @@
 package com.projeto.engsoft.projetoandroid;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,6 +37,7 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,8 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
         Intent intent = getIntent();
         loc = (Local) intent.getSerializableExtra("valor");
         //ml = new GPS(this);
+        if(!checkLocationPermission())ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
 
 
 
@@ -308,6 +312,33 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
 //
 //        return listaResult;
 //    }
+
+
+@Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    public boolean checkLocationPermission()
+    {
+        String permission = "android.permission.ACCESS_FINE_LOCATION";
+        int res = this.checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
 
 }
 
