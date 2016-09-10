@@ -12,4 +12,6 @@
     <string name="title_activity_tela_informacoes">Mais Informações</string>
     <string name="title_activity_tela_mapa">Mapa</string>
     <string name="title_activity_lista_encontrados">Locais encontrados: </string>
+    <string name="textoInternet">Internet Indisponível</string>
+    <string name="tentar">Tentar novamente</string>
 </resources>
