@@ -31,7 +31,7 @@
         android:layout_width="75pt"
         android:layout_height="75pt"
         android:id="@+id/imagemInternet"
-        android:background="@drawable/wifi"
+        android:background="@drawable/signal_wifi_off_grey_192x192"
         android:layout_below="@+id/criterios"
         android:layout_alignStart="@+id/buttonInternet"
         android:visibility="gone"/>
