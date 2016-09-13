@@ -20,6 +20,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.server.converter.StringToIntConverter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,8 +35,7 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
     private Local loc;
     private final String USER_AGENT = "Mozilla/5.0";
-
-
+    private LocationManager lm;
 
 
     @Override
@@ -50,10 +50,8 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
         Intent intent = getIntent();
         loc = (Local) intent.getSerializableExtra("valor");
         //ml = new GPS(this);
-        if(!checkLocationPermission())ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-
-
+        if (!checkLocationPermission())
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 
 
     }
@@ -73,6 +71,7 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
 //        double latitude=0;
 //        double longitude=0;
         mMap = googleMap;
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -92,8 +91,8 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             return;
-       }
-             mMap.setMyLocationEnabled(true);
+        }
+        mMap.setMyLocationEnabled(true);
 
        /*GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
             @Override
@@ -104,6 +103,9 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
             }
         };
         mMap.setOnMyLocationChangeListener(myLocationChangeListener);*/
+        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationListener gps = new GPS(mMap,loc);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, gps);
 
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
             View v = getLayoutInflater().inflate(R.layout.info_mapa, null);
@@ -133,10 +135,29 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
                 TextView endereco = (TextView) v.findViewById(R.id.endereco);
 
                 // Setting the latitude
-                nome.setText(loc.getNome());
+                if (ActivityCompat.checkSelfPermission(TelaMapa.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TelaMapa.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return null;
+                }
+                if (arg0.getPosition().latitude == lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude() && arg0.getPosition().longitude == lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude()) {
+                    nome.setText("Minha Posição");
+                    endereco.setText("");
+
+
+                } else {
+                    nome.setText(loc.getNome());
+                    endereco.setText(loc.getEndereco());
+                }
+
 
                 // Setting the longitude
-                endereco.setText(loc.getEndereco());
+
 
                 // Returning the view containing InfoWindow contents
                 return v;
@@ -164,9 +185,7 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
 
 
         LatLng mrk = new LatLng(loc.getLat(), loc.getLongt());
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        LocationListener gps = new GPS(mMap);
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, gps);
+
         mMap.addMarker(new MarkerOptions().position(mrk));
 
 
@@ -179,6 +198,8 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
         CameraPosition update = new CameraPosition(mrk,15,0,0);
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(update),3000,null);
     }
+
+
 
 
 //    private String montarURLRotaMapa(double latOrigen, double lngOrigen, double latDestino, double lngDestino){
