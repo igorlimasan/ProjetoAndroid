@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -71,43 +73,24 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
 //        double latitude=0;
 //        double longitude=0;
         mMap = googleMap;
+        LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        final Location location;
+        location = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         mMap.setMyLocationEnabled(true);
-
-       /*GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
-            @Override
-            public void onMyLocationChange(Location location) {
-                LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.addMarker(new MarkerOptions().position(loc).title("Minha Posição"));
-
-            }
-        };
-        mMap.setOnMyLocationChangeListener(myLocationChangeListener);*/
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LocationListener gps = new GPS(mMap,loc);
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, gps);
 
-        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+        GPS nGps = new GPS(mMap,loc);
+
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter(){
             View v = getLayoutInflater().inflate(R.layout.info_mapa, null);
 
             // Use default InfoWindow frame
@@ -134,20 +117,17 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
                 // Getting reference to the TextView to set longitude
                 TextView endereco = (TextView) v.findViewById(R.id.endereco);
 
+
+
                 // Setting the latitude
                 if (ActivityCompat.checkSelfPermission(TelaMapa.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TelaMapa.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
                     return null;
                 }
                 if (arg0.getPosition().latitude == lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude() && arg0.getPosition().longitude == lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude()) {
                     nome.setText("Minha Posição");
                     endereco.setText("");
+
+
 
 
                 } else {
@@ -163,6 +143,7 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
                 return v;
 
             }
+
         });
 
         // Adding and showing marker while touching the GoogleMap
@@ -178,22 +159,14 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
             }
         });
 
-
-
-
-
-
-
         LatLng mrk = new LatLng(loc.getLat(), loc.getLongt());
-
         mMap.addMarker(new MarkerOptions().position(mrk));
 
 
 
-
-
-
-
+        String res = nGps.montarURLRotaMapa(location.getLatitude(),location.getLongitude(),loc.getLat(),loc.getLongt());
+        JSONObject rota = nGps.requisicaoHTTP(res);
+        nGps.pintarCaminho(rota);
 
         CameraPosition update = new CameraPosition(mrk,15,0,0);
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(update),3000,null);
@@ -202,137 +175,7 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
 
 
 
-//    private String montarURLRotaMapa(double latOrigen, double lngOrigen, double latDestino, double lngDestino){
-//        //Base da URL
-//        String url = "http://maps.googleapis.com/maps/api/directions/json?origin=";
-//        //Local de origem
-//        url += latOrigen + "," + lngOrigen;
-//        url += "&destination=";
-//        //Local de destino
-//        url += latDestino + "," + lngDestino;
-//        //Outros parametros
-//        url += "&sensor=false&mode=driving&alternatives=true";
-//
-//        return url;
-//    }
-//
-//    public JSONObject requisicaoHTTP(String url) {
-//            JSONObject resultado = new JSONObject();
-//         try {
-//             URL obj = new URL(url);
-//             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-//
-//             // optional default is GET
-//             con.setRequestMethod("GET");
-//
-//             //add request header
-//             con.setRequestProperty("User-Agent", USER_AGENT);
-//
-//             int responseCode = con.getResponseCode();
-//             System.out.println("\nSending 'GET' request to URL : " + url);
-//             System.out.println("Response Code : " + responseCode);
-//
-//             BufferedReader in = new BufferedReader(
-//                     new InputStreamReader(con.getInputStream()));
-//             String inputLine;
-//             StringBuffer response = new StringBuffer();
-//
-//             while ((inputLine = in.readLine()) != null) {
-//                 response.append(inputLine);
-//             }
-//             in.close();
-//             resultado = new JSONObject(response.toString());
-//
-//
-//         }
-//         catch (JSONException e)
-//         {
-//             e.printStackTrace();
-//         } catch (ProtocolException e) {
-//             e.printStackTrace();
-//         } catch (MalformedURLException e) {
-//             e.printStackTrace();
-//         } catch (IOException e) {
-//             e.printStackTrace();
-//         }
-//        return resultado;
-//
-//        }
-//
-//
-//    public void pintarCaminho(JSONObject json) {
-//        try {
-//            //Recupera a lista de possíveis rotas
-//            JSONArray listaRotas = json.getJSONArray("routes");
-//            //Para efeito de aprendizado iremos utilizar apenas a primeira opção
-//            JSONObject rota = listaRotas.getJSONObject(0);
-//            //Recuperamos os pontos a serem pintados para que surga a 'linha' no mapa
-//            String pontosPintar = rota.getJSONObject("overview_polyline").getString("points");
-//            //Recuperamos a lista de latitudes e longitudes para sabermos exatamente onde pintar
-//            List<LatLng> listaCordenadas = extrairLatLngDaRota(pontosPintar);
-//
-//            //Percorremos por cada cordenada obtida
-//            for(int ponto = 0; ponto < listaCordenadas.size()-1 ; ponto++){
-//                //Definimos o ponto atual como origem
-//                LatLng pontoOrigem= listaCordenadas.get(ponto);
-//                //Definimos o próximo ponto como destino
-//                LatLng pontoDestino= listaCordenadas.get(ponto + 1);
-//                //Criamos um objeto do tipo PolylineOption para adicionarmos os pontos de origem e destino
-//                PolylineOptions opcoesDaLinha = new PolylineOptions();
-//                //Adicionamos os pontos de origem e destino da linha que vamos traçar
-//                opcoesDaLinha.add(new LatLng(pontoOrigem.latitude, pontoOrigem.longitude),
-//                        new LatLng(pontoDestino.latitude,  pontoDestino.longitude));
-//                //Criamos a linha de acordo com as opções que configuramos acima e adicionamos em nosso mapa
-//                Polyline line = mMap.addPolyline(opcoesDaLinha);
-//                //Mudamos algumas propriedades da linha que acabamos de adicionar em nosso mapa
-//                line.setWidth(5);
-//                line.setColor(Color.rgb(158, 0, 0));
-//                line.setGeodesic(true);
-//            }
-//        }
-//        catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//
-//
-//
-//    private List<LatLng> extrairLatLngDaRota(String pontosPintar) {
-//        List<LatLng> listaResult = new ArrayList<LatLng>();
-//        int index = 0, len = pontosPintar.length();
-//        int lat = 0, lng = 0;
-//
-//        while (index < len) {
-//
-//            int b, shift = 0, result = 0;
-//            do {
-//                b = pontosPintar.charAt(index++) - 63;
-//                result |= (b & 0x1f) << shift;
-//                shift += 5;
-//            } while (b >= 0x20);
-//
-//            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-//            lat += dlat;
-//
-//            shift = 0;
-//            result = 0;
-//            do {
-//                b = pontosPintar.charAt(index++) - 63;
-//                result |= (b & 0x1f) << shift;
-//                shift += 5;
-//            } while (b >= 0x20);
-//
-//            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-//            lng += dlng;
-//
-//            LatLng p = new LatLng( (((double) lat / 1E5)),
-//                    (((double) lng / 1E5) ));
-//            listaResult.add(p);
-//        }
-//
-//        return listaResult;
-//    }
+
 
 
 @Override
