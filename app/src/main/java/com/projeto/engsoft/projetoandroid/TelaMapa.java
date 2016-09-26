@@ -75,7 +75,7 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
         mMap = googleMap;
         LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         final Location location;
-        location = locManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        location = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -123,7 +123,7 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
                 if (ActivityCompat.checkSelfPermission(TelaMapa.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(TelaMapa.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return null;
                 }
-                if (arg0.getPosition().latitude == lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude() && arg0.getPosition().longitude == lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude()) {
+                if (arg0.getPosition().latitude == location.getLatitude() && arg0.getPosition().longitude == location.getLongitude()) {
                     nome.setText("Minha Posição");
                     endereco.setText("");
 
