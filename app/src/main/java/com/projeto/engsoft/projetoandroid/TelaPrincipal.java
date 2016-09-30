@@ -115,7 +115,7 @@ public class TelaPrincipal extends AppCompatActivity {
         {
             if(spin.getSelectedItemPosition() == 0)
             {
-                res = new BuscaNome(local,texto.getText().toString()).busca();
+                res = new BuscaNome(local,texto.getText().toString()).busca().get(0);
                 if(res==null)
                 {
                     Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();

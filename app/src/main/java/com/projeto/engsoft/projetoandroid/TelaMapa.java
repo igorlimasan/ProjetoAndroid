@@ -38,6 +38,8 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
     private Local loc;
     private final String USER_AGENT = "Mozilla/5.0";
     private LocationManager lm;
+    private Location location;
+
 
 
     @Override
@@ -54,6 +56,8 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
         //ml = new GPS(this);
         if (!checkLocationPermission())
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        location = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
 
     }
@@ -73,9 +77,7 @@ public class TelaMapa extends FragmentActivity implements OnMapReadyCallback {
 //        double latitude=0;
 //        double longitude=0;
         mMap = googleMap;
-        LocationManager locManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        final Location location;
-        location = locManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;

@@ -1,6 +1,12 @@
 package com.projeto.engsoft.projetoandroid;
 
+import android.support.annotation.NonNull;
+
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by User on 03/09/2016.
@@ -15,13 +21,15 @@ public class BuscaNome implements Busca {
     }
 
     @Override
-    public Local busca(){
+    public List<Local> busca(){
+        List<Local> lista = new LinkedList<Local>();
 
         for(Local l:locais)
         {
             if(l.getNome().toLowerCase().equals(valor.toLowerCase()))
             {
-                return l;
+                lista.add(l);
+                return lista;
             }
         }
         return null;

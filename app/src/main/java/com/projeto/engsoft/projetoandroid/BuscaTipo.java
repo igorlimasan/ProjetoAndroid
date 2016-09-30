@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by User on 03/09/2016.
  */
-public class BuscaTipo {
+public class BuscaTipo implements Busca{
     private List<Local> locais;
     private String valor;
 
