@@ -1,15 +1,22 @@
 package com.projeto.engsoft.projetoandroid;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -65,6 +72,71 @@ public class TelaPrincipal extends AppCompatActivity {
         botaoInternet = (Button) findViewById(R.id.buttonInternet);
         imageInternet = (ImageView) findViewById(R.id.imagemInternet);
 
+        texto.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    Local res = null;
+                    List<Local> resL;
+                    if(!TextUtils.isEmpty(texto.getText().toString())){
+                        if(spin.getSelectedItemPosition() == 0){
+                            resL = new BuscaNome(local,texto.getText().toString()).busca();
+                            if(resL.isEmpty()){
+                                Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
+                                texto.setText("");
+                                texto.requestFocus();
+                            }
+                            else{
+                                Intent myIntent = new Intent(TelaPrincipal.this, TelaInformacoes.class);
+                                myIntent.putExtra("valor", resL.get(0));
+                                startActivity(myIntent);
+                            }
+                        }
+
+                        else if(spin.getSelectedItemPosition() == 1){
+                            resL = new BuscaTipo(local,texto.getText().toString()).busca();
+                            if(resL.isEmpty()){
+                                Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
+                                texto.setText("");
+                                texto.requestFocus();
+                            }
+                            else{
+                                Intent myIntent = new Intent(TelaPrincipal.this, TelaListaEncontrados.class);
+                                myIntent.putExtra("valor", (Serializable)resL);
+                                startActivity(myIntent);
+                            }
+                        }
+                        else if(spin.getSelectedItemPosition() == 2)
+                        {
+                            resL = new BuscaComida(local,texto.getText().toString()).busca();
+                            if(resL.isEmpty())
+                            {
+                                Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
+                                texto.setText("");
+                                texto.requestFocus();
+                            }
+                            else
+                            {
+                                Intent myIntent = new Intent(TelaPrincipal.this, TelaListaEncontrados.class);
+                                myIntent.putExtra("valor", (Serializable)resL);
+                                startActivity(myIntent);
+                            }
+                        }
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Digite um valor para pesquisa",Toast.LENGTH_SHORT).show();
+                        texto.requestFocus();
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+
+
 
 
 
@@ -96,7 +168,37 @@ public class TelaPrincipal extends AppCompatActivity {
                     startActivity(myIntent);
                 }
             });
+
+
+            LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+            if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                // Build the alert dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Localização não ativada");
+                builder.setMessage("Para melhor experiência com o Find a Food ative o servico de Localização");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Show location settings when the user acknowledges the alert dialog
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+                Dialog alertDialog = builder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+            }
+
+
+
+
+
+
+
+
+
+
         }
+
 
 
 
@@ -111,36 +213,29 @@ public class TelaPrincipal extends AppCompatActivity {
     public void onClick(View view) {
         Local res = null;
         List<Local> resL;
-        if(!TextUtils.isEmpty(texto.getText().toString()))
-        {
-            if(spin.getSelectedItemPosition() == 0)
-            {
-                res = new BuscaNome(local,texto.getText().toString()).busca().get(0);
-                if(res==null)
-                {
+        if(!TextUtils.isEmpty(texto.getText().toString())){
+            if(spin.getSelectedItemPosition() == 0){
+                resL = new BuscaNome(local,texto.getText().toString()).busca();
+                if(resL.isEmpty()){
                     Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
                     texto.setText("");
                     texto.requestFocus();
                 }
-                else
-                {
+                else{
                     Intent myIntent = new Intent(this, TelaInformacoes.class);
                     myIntent.putExtra("valor", res);
                     this.startActivity(myIntent);
                 }
             }
 
-            else if(spin.getSelectedItemPosition() == 1)
-            {
+            else if(spin.getSelectedItemPosition() == 1){
                 resL = new BuscaTipo(local,texto.getText().toString()).busca();
-                if(resL.isEmpty())
-                {
+                if(resL.isEmpty()){
                     Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
                     texto.setText("");
                     texto.requestFocus();
                 }
-                else
-                {
+                else{
                     Intent myIntent = new Intent(this, TelaListaEncontrados.class);
                     myIntent.putExtra("valor", (Serializable)resL);
                     this.startActivity(myIntent);
@@ -162,13 +257,8 @@ public class TelaPrincipal extends AppCompatActivity {
                     this.startActivity(myIntent);
                 }
             }
-
-
-
-
         }
-        else
-        {
+        else{
             Toast.makeText(getApplicationContext(),"Digite um valor para pesquisa",Toast.LENGTH_SHORT).show();
             texto.requestFocus();
         }

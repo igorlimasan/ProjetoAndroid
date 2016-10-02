@@ -29,9 +29,9 @@ public class BuscaNome implements Busca {
             if(l.getNome().toLowerCase().equals(valor.toLowerCase()))
             {
                 lista.add(l);
-                return lista;
+
             }
         }
-        return null;
+        return lista;
     }
 }
