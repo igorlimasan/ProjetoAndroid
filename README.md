@@ -9,7 +9,9 @@
 <img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/Screenshot_20161003-095354.png" width=400><br>
 <b><h1>Aviso Internet desativada</h1></b><p>
 <img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/Screenshot_20161003-095405.png" width=400)><br>
-<img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/Screenshot_20161003-095405.png" width=400)>Aqui jaz um diagrama de classe<br>
+<b><h1>Diagrama de Classe</h1></b><p>
+<img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/GPS_Diag_Classe_OFI.jpeg" width=400)><br>
+
 
 
 
