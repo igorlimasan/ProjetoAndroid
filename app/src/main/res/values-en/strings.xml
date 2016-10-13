@@ -14,4 +14,8 @@
     <string name="title_activity_lista_encontrados">Places Found: </string>
     <string name="textoInternet">Internet connection unavailable</string>
     <string name="tentar">Retry</string>
+    <string-array name="item_nav">
+        <item>Pesquisar</item>
+        <item>Locais</item>
+    </string-array>
 </resources>

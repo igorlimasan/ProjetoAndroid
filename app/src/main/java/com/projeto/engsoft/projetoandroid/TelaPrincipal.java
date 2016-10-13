@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.multidex.MultiDex;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -50,6 +52,11 @@ public class TelaPrincipal extends AppCompatActivity {
     private ImageView imageInternet;
 
 
+    private ListView sideMenu;
+    private DrawerLayout  navLayout;
+    private ActionBarDrawerToggle navDrawerToogle;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +72,8 @@ public class TelaPrincipal extends AppCompatActivity {
         texto = (EditText) findViewById(R.id.valor);
         lv=(ListView) findViewById(R.id.lista);
         botao = (Button) findViewById(R.id.pesq);
+        sideMenu = (ListView) findViewById(R.id.lista_itens);
+
 
 
 
