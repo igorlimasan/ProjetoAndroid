@@ -3,20 +3,20 @@ package com.projeto.engsoft.projetoandroid;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.location.LocationManager;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.Settings;
-import android.support.multidex.MultiDex;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
@@ -28,8 +28,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONException;
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -54,16 +52,33 @@ public class TelaPrincipal extends AppCompatActivity {
 
     private ListView sideMenu;
     private DrawerLayout  navLayout;
-    private ActionBarDrawerToggle navDrawerToogle;
+    private ActionBarDrawerToggle navDrawerToggle;
+    private String navTitulo;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Integer[] navImage={
+                R.drawable.ic_action_search,
+                R.drawable.ic_action_place
+        };
+
+        String[] navTitles = {
+                "Pesquisar",
+                "Locais"
+        };
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_principal);
 
+
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        navLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        navTitulo = getTitle().toString();
 
         //textResult = (TextView) findViewById(R.id.result);
         final StringBuilder result = new StringBuilder();
@@ -73,9 +88,13 @@ public class TelaPrincipal extends AppCompatActivity {
         lv=(ListView) findViewById(R.id.lista);
         botao = (Button) findViewById(R.id.pesq);
         sideMenu = (ListView) findViewById(R.id.lista_itens);
+        sideMenu.setAdapter(new CustomList(this,navTitles,navImage));
 
+        setupDrawer();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-
+        lv.setVisibility(View.GONE);
 
         textoInternet = (TextView) findViewById(R.id.textoInternet);
         botaoInternet = (Button) findViewById(R.id.buttonInternet);
@@ -154,7 +173,7 @@ public class TelaPrincipal extends AppCompatActivity {
 
             spin.setVisibility(View.GONE);
             texto.setVisibility(View.GONE);
-            lv.setVisibility(View.GONE);
+
             botao.setVisibility(View.GONE);
             textoInternet.setVisibility(View.VISIBLE);
             botaoInternet.setVisibility(View.VISIBLE);
@@ -166,7 +185,8 @@ public class TelaPrincipal extends AppCompatActivity {
             trazerDados();
             spin.setVisibility(View.VISIBLE);
             texto.setVisibility(View.VISIBLE);
-            lv.setVisibility(View.VISIBLE);
+
+            botao.setVisibility(View.VISIBLE);
 
             List<String> lista = Connection.getInstance().returnNames(local);
             lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(),R.layout.texto_lista,lista));
@@ -196,6 +216,20 @@ public class TelaPrincipal extends AppCompatActivity {
                 alertDialog.setCanceledOnTouchOutside(false);
                 alertDialog.show();
             }
+
+            sideMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                    if(position == 1){
+                        Intent myIntent = new Intent(TelaPrincipal.this, TelaListaEncontrados.class);
+                        myIntent.putExtra("valor", (Serializable)trazerDados());
+                        startActivity(myIntent);
+
+                    }
+
+                }
+            });
+
 
 
 
@@ -232,7 +266,7 @@ public class TelaPrincipal extends AppCompatActivity {
                 }
                 else{
                     Intent myIntent = new Intent(this, TelaInformacoes.class);
-                    myIntent.putExtra("valor", res);
+                    myIntent.putExtra("valor", resL.get(0));
                     this.startActivity(myIntent);
                 }
             }
@@ -322,7 +356,6 @@ public class TelaPrincipal extends AppCompatActivity {
             trazerDados();
             spin.setVisibility(View.VISIBLE);
             texto.setVisibility(View.VISIBLE);
-            lv.setVisibility(View.VISIBLE);
             botao.setVisibility(View.VISIBLE);
             List<String> lista = Connection.getInstance().returnNames(local);
             lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(),R.layout.texto_lista,lista));
@@ -371,5 +404,43 @@ public class TelaPrincipal extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    private void setupDrawer() {
+        navDrawerToggle = new ActionBarDrawerToggle(this, navLayout,
+                R.string.nav_open, R.string.app_name) {
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+
+                getSupportActionBar().setTitle(R.string.nav_open);
+            }
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+
+                getSupportActionBar().setTitle(navTitulo);
+            }
+        };
+
+        navDrawerToggle.setDrawerIndicatorEnabled(true);
+        navLayout.setDrawerListener(navDrawerToggle);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (navDrawerToggle.onOptionsItemSelected(item)) return true;
+        return false;
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        navDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        navDrawerToggle.onConfigurationChanged(newConfig);
     }
 }

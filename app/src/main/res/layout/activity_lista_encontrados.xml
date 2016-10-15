@@ -14,5 +14,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/lista"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:divider="#d7d7d7"
+        android:dividerHeight="4px"/>
 </RelativeLayout>

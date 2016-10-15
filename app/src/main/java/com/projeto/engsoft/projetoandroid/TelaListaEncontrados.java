@@ -20,15 +20,27 @@ public class TelaListaEncontrados extends AppCompatActivity {
         setContentView(R.layout.activity_lista_encontrados);
         Intent intent = getIntent();
         found = (List<Local>)intent.getSerializableExtra("valor");
+        if(found.size() == Connection.getInstance().numeroLugares()) setTitle("Locais cadastrados");
+        else setTitle(R.string.title_activity_lista_encontrados);
+
+
         lv = (ListView) findViewById(R.id.lista);
 
         lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(),R.layout.texto_lista,Connection.getInstance().returnNames(found)));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent myIntent = new Intent(TelaListaEncontrados.this, TelaMapa.class);
-                myIntent.putExtra("valor",found.get(position));
-                startActivity(myIntent);
+                if(found.size() == Connection.getInstance().numeroLugares()){
+                    Intent myIntent = new Intent(TelaListaEncontrados.this, TelaInformacoes.class);
+                    myIntent.putExtra("valor", found.get(position));
+                    startActivity(myIntent);
+                }
+                else
+                {
+                    Intent myIntent = new Intent(TelaListaEncontrados.this, TelaMapa.class);
+                    myIntent.putExtra("valor", found.get(position));
+                    startActivity(myIntent);
+                }
             }
         });
 

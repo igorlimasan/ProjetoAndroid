@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 public class Connection{
     private static Connection uniqueInstance;
+    List<Local> found;
 
     public static Connection getInstance() {
         if(uniqueInstance == null)
@@ -60,7 +61,7 @@ public class Connection{
 
         //System.out.println(response.toString());
 
-        List<Local> found = findAllItems(new JSONObject(response.toString()));
+        found = findAllItems(new JSONObject(response.toString()));
 
         return found;
     }
@@ -108,6 +109,11 @@ public class Connection{
         }
         return nomes;
     }
+
+    public  int numeroLugares(){
+        return found.size();
+    }
+
 
 
 }

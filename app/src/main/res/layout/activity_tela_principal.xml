@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
     <!-- Layout dentro do navigation menu-->
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -88,7 +89,8 @@
                 android:id="@+id/lista"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/pesq" />
+                android:layout_below="@+id/pesq"
+                android:visibility="gone"/>
 
 
         </RelativeLayout>
@@ -98,6 +100,7 @@
         android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="left|start"
-        android:background="#ffeeeeee"
-        android:entries="@array/item_nav"/>
+        android:background="@color/colorPrimaryDark"
+        android:divider="#FFFFFF"
+        android:dividerHeight="4px"/>
     </android.support.v4.widget.DrawerLayout>

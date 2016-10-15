@@ -8,14 +8,11 @@
     <string name="pesquisar">Search</string>
     <string name="result"></string>
     <string name="dica">Enter your text here</string>
-    <string name="mapa">See in Map</string>
+    <string name="mapa">Find in Map</string>
     <string name="title_activity_tela_informacoes">More Info.</string>
     <string name="title_activity_tela_mapa">Map</string>
     <string name="title_activity_lista_encontrados">Places Found: </string>
     <string name="textoInternet">Internet connection unavailable</string>
     <string name="tentar">Retry</string>
-    <string-array name="item_nav">
-        <item>Pesquisar</item>
-        <item>Locais</item>
-    </string-array>
+    <string name="nav_open">Menu</string>
 </resources>
