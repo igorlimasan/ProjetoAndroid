@@ -15,4 +15,5 @@
     <string name="textoInternet">Internet Indisponível</string>
     <string name="tentar">Tentar novamente</string>
     <string name="nav_open">Menu</string>
+    <string name="lista_cadastrados">Locais Cadastrados</string>
 </resources>

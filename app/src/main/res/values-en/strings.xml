@@ -15,4 +15,5 @@
     <string name="textoInternet">Internet connection unavailable</string>
     <string name="tentar">Retry</string>
     <string name="nav_open">Menu</string>
+    <string name="lista_cadastrados">Locais Cadastrados</string>
 </resources>

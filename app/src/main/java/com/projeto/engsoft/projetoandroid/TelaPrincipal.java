@@ -117,7 +117,9 @@ public class TelaPrincipal extends AppCompatActivity {
                             else{
                                 Intent myIntent = new Intent(TelaPrincipal.this, TelaInformacoes.class);
                                 myIntent.putExtra("valor", resL.get(0));
+                                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                                 startActivity(myIntent);
+                                finish();
                             }
                         }
 
@@ -131,8 +133,9 @@ public class TelaPrincipal extends AppCompatActivity {
                             else{
                                 Intent myIntent = new Intent(TelaPrincipal.this, TelaListaEncontrados.class);
                                 myIntent.putExtra("valor", (Serializable)resL);
+                                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                                 startActivity(myIntent);
-                            }
+                                finish();                            }
                         }
                         else if(spin.getSelectedItemPosition() == 2)
                         {
@@ -147,7 +150,9 @@ public class TelaPrincipal extends AppCompatActivity {
                             {
                                 Intent myIntent = new Intent(TelaPrincipal.this, TelaListaEncontrados.class);
                                 myIntent.putExtra("valor", (Serializable)resL);
+                                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                                 startActivity(myIntent);
+                                finish();
                             }
                         }
                     }
@@ -223,9 +228,13 @@ public class TelaPrincipal extends AppCompatActivity {
                     if(position == 1){
                         Intent myIntent = new Intent(TelaPrincipal.this, TelaListaEncontrados.class);
                         myIntent.putExtra("valor", (Serializable)trazerDados());
+                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
                         startActivity(myIntent);
+                        finish();
 
                     }
+
+                    if(position == 0) navLayout.closeDrawer(sideMenu);
 
                 }
             });
@@ -267,7 +276,9 @@ public class TelaPrincipal extends AppCompatActivity {
                 else{
                     Intent myIntent = new Intent(this, TelaInformacoes.class);
                     myIntent.putExtra("valor", resL.get(0));
-                    this.startActivity(myIntent);
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                    startActivity(myIntent);
+                    finish();
                 }
             }
 
@@ -281,7 +292,9 @@ public class TelaPrincipal extends AppCompatActivity {
                 else{
                     Intent myIntent = new Intent(this, TelaListaEncontrados.class);
                     myIntent.putExtra("valor", (Serializable)resL);
-                    this.startActivity(myIntent);
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                    startActivity(myIntent);
+                    finish();
                 }
             }
             else if(spin.getSelectedItemPosition() == 2)
@@ -297,7 +310,9 @@ public class TelaPrincipal extends AppCompatActivity {
                 {
                     Intent myIntent = new Intent(this, TelaListaEncontrados.class);
                     myIntent.putExtra("valor", (Serializable)resL);
-                    this.startActivity(myIntent);
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                    startActivity(myIntent);
+                    finish();
                 }
             }
         }
