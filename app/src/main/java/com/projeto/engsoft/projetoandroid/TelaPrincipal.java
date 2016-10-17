@@ -38,7 +38,7 @@ import java.util.Locale;
 public class TelaPrincipal extends AppCompatActivity {
 
     private List<Local> local;
-    private ListView lv;
+
     private Spinner spin;
     private EditText texto;
     private Button botao;
@@ -85,7 +85,6 @@ public class TelaPrincipal extends AppCompatActivity {
         spin = (Spinner) findViewById(R.id.criterios);
         spin.requestFocus();
         texto = (EditText) findViewById(R.id.valor);
-        lv=(ListView) findViewById(R.id.lista);
         botao = (Button) findViewById(R.id.pesq);
         sideMenu = (ListView) findViewById(R.id.lista_itens);
         sideMenu.setAdapter(new CustomList(this,navTitles,navImage));
@@ -94,7 +93,6 @@ public class TelaPrincipal extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        lv.setVisibility(View.GONE);
 
         textoInternet = (TextView) findViewById(R.id.textoInternet);
         botaoInternet = (Button) findViewById(R.id.buttonInternet);
@@ -194,15 +192,6 @@ public class TelaPrincipal extends AppCompatActivity {
             botao.setVisibility(View.VISIBLE);
 
             List<String> lista = Connection.getInstance().returnNames(local);
-            lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(),R.layout.texto_lista,lista));
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                    Intent myIntent = new Intent(TelaPrincipal.this, TelaInformacoes.class);
-                    myIntent.putExtra("valor", local.get(position));
-                    startActivity(myIntent);
-                }
-            });
-
 
             LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
             if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -373,14 +362,7 @@ public class TelaPrincipal extends AppCompatActivity {
             texto.setVisibility(View.VISIBLE);
             botao.setVisibility(View.VISIBLE);
             List<String> lista = Connection.getInstance().returnNames(local);
-            lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(),R.layout.texto_lista,lista));
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                    Intent myIntent = new Intent(TelaPrincipal.this, TelaInformacoes.class);
-                    myIntent.putExtra("valor", local.get(position));
-                    startActivity(myIntent);
-                }
-            });
+
         }
     }
 
