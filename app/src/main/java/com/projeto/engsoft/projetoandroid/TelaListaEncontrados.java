@@ -1,49 +1,51 @@
 package com.projeto.engsoft.projetoandroid;
 
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.List;
 
-public class TelaListaEncontrados extends AppCompatActivity {
+public class TelaListaEncontrados extends BaseFragment {
     List<Local> found;
     ListView lv;
+    private View view;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lista_encontrados);
-        Intent intent = getIntent();
-        found = (List<Local>)intent.getSerializableExtra("valor");
-        if(found.size() == Connection.getInstance().numeroLugares()) setTitle("Locais cadastrados");
-        else setTitle(R.string.title_activity_lista_encontrados);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.activity_lista_encontrados,container,false);
+        found = (List<Local>) getArguments().getSerializable("valor");
+        if(found.size() == Connection.getInstance().numeroLugares()) ((TelaPrincipal)getActivity()).setTitle(((TelaPrincipal)getActivity()).getString(R.string.locais_cad));
+        else ((TelaPrincipal) getActivity()).setTitle(((TelaPrincipal) getActivity()).getString(R.string.title_activity_lista_encontrados));
 
 
-        lv = (ListView) findViewById(R.id.lista);
+        lv = (ListView) view.findViewById(R.id.lista);
 
-        lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(),R.layout.texto_lista,Connection.getInstance().returnNames(found)));
+        lv.setAdapter(new ArrayAdapter<String>(getActivity().getApplicationContext(),R.layout.texto_lista,Connection.getInstance().returnNames(found)));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(found.size() == Connection.getInstance().numeroLugares()){
-                    Intent myIntent = new Intent(TelaListaEncontrados.this, TelaInformacoes.class);
+                    Intent myIntent = new Intent(getActivity(), TelaInformacoes.class);
                     myIntent.putExtra("valor", found.get(position));
                     startActivity(myIntent);
                 }
                 else
                 {
-                    Intent myIntent = new Intent(TelaListaEncontrados.this, TelaMapa.class);
+                    Intent myIntent = new Intent(getActivity(), TelaMapa.class);
                     myIntent.putExtra("valor", found.get(position));
                     startActivity(myIntent);
                 }
             }
         });
-
-
+        return view;
     }
 }
