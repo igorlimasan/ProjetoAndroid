@@ -40,6 +40,9 @@ import java.util.Locale;
 
 public class TelaPrincipal extends AppCompatActivity {
     private ListView sideMenu;
+
+
+
     private DrawerLayout  navLayout;
     private ActionBarDrawerToggle navDrawerToggle;
     private String navTitulo;
@@ -112,17 +115,9 @@ public class TelaPrincipal extends AppCompatActivity {
             });
 
     }
-
-
-
-
-
-
-
-
-
-
-
+    public DrawerLayout getNavLayout() {
+        return navLayout;
+    }
 
     @Override
     public void onBackPressed() {

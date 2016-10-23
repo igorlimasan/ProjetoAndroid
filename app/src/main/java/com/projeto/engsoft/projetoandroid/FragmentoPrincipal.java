@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -58,6 +59,8 @@ public class FragmentoPrincipal extends  BaseFragment {
     private ImageView imageInternet;
     private View view;
 
+    private DrawerLayout navDrawerLayout;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class FragmentoPrincipal extends  BaseFragment {
         spin = (Spinner) view.findViewById(R.id.criterios);
         texto = (EditText) view.findViewById(R.id.valor);
         botao = (Button) view.findViewById(R.id.pesq);
+        navDrawerLayout = ((TelaPrincipal) getActivity()).getNavLayout();
         botao.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,16 +153,20 @@ public class FragmentoPrincipal extends  BaseFragment {
             spin.setVisibility(view.GONE);
             texto.setVisibility(view.GONE);
             botao.setVisibility(view.GONE);
+            navDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
 
             textoInternet.setVisibility(view.VISIBLE);
             botaoInternet.setVisibility(view.VISIBLE);
             imageInternet.setVisibility(view.VISIBLE);
+
 
         } else {
 
             spin.setVisibility(view.VISIBLE);
             texto.setVisibility(view.VISIBLE);
             botao.setVisibility(view.VISIBLE);
+            navDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
             try {
                 local = Connection.getInstance().sendGet();
@@ -262,7 +270,8 @@ public class FragmentoPrincipal extends  BaseFragment {
 
     public void onClickInternet()
     {
-        final ProgressDialog progress = new ProgressDialog(getActivity().getApplicationContext());
+
+        final ProgressDialog progress = new ProgressDialog(getActivity());
 
         if(loc.getLanguage().equals("en"))
         {
@@ -305,6 +314,24 @@ public class FragmentoPrincipal extends  BaseFragment {
             spin.setVisibility(View.VISIBLE);
             texto.setVisibility(View.VISIBLE);
             botao.setVisibility(View.VISIBLE);
+            navDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            LocationManager lm = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+            if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                // Build the alert dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Localização não ativada");
+                builder.setMessage("Para melhor experiência com o Find a Food ative o servico de Localização");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Show location settings when the user acknowledges the alert dialog
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    }
+                });
+                Dialog alertDialog = builder.create();
+                alertDialog.setCanceledOnTouchOutside(false);
+                alertDialog.show();
+            }
 
 
         }

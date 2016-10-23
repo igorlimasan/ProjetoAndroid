@@ -1,5 +1,7 @@
 package com.projeto.engsoft.projetoandroid;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import java.util.List;
@@ -47,5 +50,15 @@ public class TelaListaEncontrados extends BaseFragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public boolean onBackPressed() {
+
+        Fragment frag = new FragmentoPrincipal();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.fragAtual, frag).commit();
+        return super.onBackPressed();
+
     }
 }
