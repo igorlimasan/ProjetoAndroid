@@ -1,5 +1,13 @@
 package com.projeto.engsoft.projetoandroid;
 
+import android.util.Log;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -13,7 +21,7 @@ import org.json.JSONObject;
 
 public class Connection{
     private static Connection uniqueInstance;
-    List<Local> found;
+    List<Local> found = new LinkedList<>();
 
     public static Connection getInstance() {
         if(uniqueInstance == null)
@@ -34,7 +42,7 @@ public class Connection{
         //String url = "https://api.myjson.com/bins/4aj31";
         //String url = "https://api.myjson.com/bins/4ag9o";
         //String url = "https://api.myjson.com/bins/4kgoo";
-        String url = "https://api.myjson.com/bins/567eg";
+       /* String url = "https://api.myjson.com/bins/567eg";
 
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -61,12 +69,31 @@ public class Connection{
 
         //System.out.println(response.toString());
 
-        found = findAllItems(new JSONObject(response.toString()));
+        found = findAllItems(new JSONObject(response.toString()));*/
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference fireDb = database.getReference();
+        fireDb.child("locais").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    found.add(new Local(ds.child("nome").getValue().toString(),ds.child("tipo").getValue().toString(),toLista(ds.child("comidas")),Double.valueOf(ds.child("lat").getValue().toString()),Double.valueOf(ds.child("long").getValue().toString()),ds.child("endereco").getValue().toString()));
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("FIREBASE ERRO","Erro: "+databaseError.getMessage());
+
+            }
+        });
 
         return found;
     }
 
-    public List<Local> findAllItems(JSONObject response) {
+/*    public List<Local> findAllItems(JSONObject response) {
 
         List<Local> found = new LinkedList<Local>();
 
@@ -83,20 +110,17 @@ public class Connection{
         }
 
         return found;
-    }
-    public List<String> toLista(JSONArray json)
+    }*/
+    public List<String> toLista(DataSnapshot ds)
     {
         List<String> list = new LinkedList<String>();
-        if (json != null) {
-            int len = json.length();
-            for (int i=0;i<len;i++){
-                try {
-                    list.add(json.get(i).toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            for (DataSnapshot d : ds.getChildren()){
+                Log.d("COMIDAS",d.getValue().toString());
+
+                    list.add(d.getValue().toString());
+
             }
-        }
+
         return list;
     }
 

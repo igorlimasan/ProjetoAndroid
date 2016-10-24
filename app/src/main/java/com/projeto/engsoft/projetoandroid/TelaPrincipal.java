@@ -17,7 +17,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -31,6 +33,12 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -47,6 +55,9 @@ public class TelaPrincipal extends AppCompatActivity {
     private ActionBarDrawerToggle navDrawerToggle;
     private String navTitulo;
 
+    private List<Local> local;
+
+
 
 
     @Override
@@ -61,8 +72,11 @@ public class TelaPrincipal extends AppCompatActivity {
                 "Locais"
         };
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_principal);
+
+
 
 
 
@@ -82,9 +96,17 @@ public class TelaPrincipal extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         setTitle(R.string.app_name);
+        try {
+            local = Connection.getInstance().sendGet();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         FrameLayout frameFrag = (FrameLayout) findViewById(R.id.fragAtual);
         Fragment frag = new FragmentoPrincipal();
+        Bundle args = new Bundle();
+        args.putSerializable("valor",(Serializable)local);
+        frag.setArguments(args);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(frameFrag.getId(), frag).commit();
 
@@ -95,6 +117,9 @@ public class TelaPrincipal extends AppCompatActivity {
                        navLayout.closeDrawer(sideMenu);
                         FrameLayout frameFrag = (FrameLayout) findViewById(R.id.fragAtual);
                         Fragment frag = new FragmentoPrincipal();
+                        Bundle args = new Bundle();
+                        args.putSerializable("valor",(Serializable)local);
+                        frag.setArguments(args);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(frameFrag.getId(), frag).commit();
                     }
@@ -102,11 +127,7 @@ public class TelaPrincipal extends AppCompatActivity {
                         navLayout.closeDrawer(sideMenu);
                         TelaListaEncontrados tle = new TelaListaEncontrados ();
                         Bundle args = new Bundle();
-                        try {
-                            args.putSerializable("valor",(Serializable)Connection.getInstance().sendGet());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        args.putSerializable("valor",(Serializable)local);
                         tle.setArguments(args);
                         getFragmentManager().beginTransaction().replace(R.id.fragAtual,tle).commit();
                     }
@@ -155,6 +176,12 @@ public class TelaPrincipal extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         navDrawerToggle.syncState();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 
     @Override
