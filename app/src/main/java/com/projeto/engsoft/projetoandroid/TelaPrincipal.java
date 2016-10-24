@@ -42,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,7 +56,7 @@ public class TelaPrincipal extends AppCompatActivity {
     private ActionBarDrawerToggle navDrawerToggle;
     private String navTitulo;
 
-    private List<Local> local;
+    private List<Local> local = new LinkedList<Local>();
 
 
 
@@ -76,10 +77,6 @@ public class TelaPrincipal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_principal);
 
-
-
-
-
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
@@ -96,17 +93,10 @@ public class TelaPrincipal extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         setTitle(R.string.app_name);
-        try {
-            local = Connection.getInstance().sendGet();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
 
         FrameLayout frameFrag = (FrameLayout) findViewById(R.id.fragAtual);
         Fragment frag = new FragmentoPrincipal();
-        Bundle args = new Bundle();
-        args.putSerializable("valor",(Serializable)local);
-        frag.setArguments(args);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(frameFrag.getId(), frag).commit();
 
@@ -117,9 +107,6 @@ public class TelaPrincipal extends AppCompatActivity {
                        navLayout.closeDrawer(sideMenu);
                         FrameLayout frameFrag = (FrameLayout) findViewById(R.id.fragAtual);
                         Fragment frag = new FragmentoPrincipal();
-                        Bundle args = new Bundle();
-                        args.putSerializable("valor",(Serializable)local);
-                        frag.setArguments(args);
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.replace(frameFrag.getId(), frag).commit();
                     }
@@ -127,7 +114,7 @@ public class TelaPrincipal extends AppCompatActivity {
                         navLayout.closeDrawer(sideMenu);
                         TelaListaEncontrados tle = new TelaListaEncontrados ();
                         Bundle args = new Bundle();
-                        args.putSerializable("valor",(Serializable)local);
+                        args.putSerializable("valor",(Serializable)Connection.getInstance().getFound());
                         tle.setArguments(args);
                         getFragmentManager().beginTransaction().replace(R.id.fragAtual,tle).commit();
                     }
@@ -193,4 +180,5 @@ public class TelaPrincipal extends AppCompatActivity {
     public void setActionBarTitle(String title){
         getActionBar().setTitle(title);
     }
+
 }

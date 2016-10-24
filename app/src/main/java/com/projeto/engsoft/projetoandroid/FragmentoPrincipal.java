@@ -67,7 +67,7 @@ public class FragmentoPrincipal extends  BaseFragment {
 
 
         view = inflater.inflate(R.layout.frag_principal, container, false);
-        local = (List<Local>) getArguments().getSerializable("valor");
+
 
 
         spin = (Spinner) view.findViewById(R.id.criterios);
@@ -167,6 +167,11 @@ public class FragmentoPrincipal extends  BaseFragment {
             spin.setVisibility(view.VISIBLE);
             texto.setVisibility(view.VISIBLE);
             botao.setVisibility(view.VISIBLE);
+            try {
+                local = Connection.getInstance().sendGet();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             navDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
             try {

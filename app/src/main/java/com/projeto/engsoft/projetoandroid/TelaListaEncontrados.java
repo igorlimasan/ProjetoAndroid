@@ -25,7 +25,10 @@ public class TelaListaEncontrados extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_lista_encontrados,container,false);
+
         found = (List<Local>) getArguments().getSerializable("valor");
+
+
         if(found.size() == Connection.getInstance().numeroLugares()) ((TelaPrincipal)getActivity()).setTitle(((TelaPrincipal)getActivity()).getString(R.string.locais_cad));
         else ((TelaPrincipal) getActivity()).setTitle(((TelaPrincipal) getActivity()).getString(R.string.title_activity_lista_encontrados));
 

@@ -21,7 +21,10 @@ import org.json.JSONObject;
 
 public class Connection{
     private static Connection uniqueInstance;
-    List<Local> found = new LinkedList<>();
+
+
+
+    List<Local> found = new LinkedList<Local>();
 
     public static Connection getInstance() {
         if(uniqueInstance == null)
@@ -36,6 +39,7 @@ public class Connection{
 
     // HTTP GET request
     public List<Local> sendGet() throws Exception {
+        found.clear();
 
         //https://api.myjson.com/bins/3kpyw
         //http://api.flickr.com/services/feeds/photos_public.gne?tags=beatles&format=json&jsoncallback=?
@@ -115,7 +119,7 @@ public class Connection{
     {
         List<String> list = new LinkedList<String>();
             for (DataSnapshot d : ds.getChildren()){
-                Log.d("COMIDAS",d.getValue().toString());
+                //Log.d("COMIDAS",d.getValue().toString());
 
                     list.add(d.getValue().toString());
 
@@ -132,6 +136,9 @@ public class Connection{
             nomes.add(l.getNome());
         }
         return nomes;
+    }
+    public List<Local> getFound() {
+        return found;
     }
 
     public  int numeroLugares(){
