@@ -2,6 +2,8 @@ package com.projeto.engsoft.projetoandroid;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +17,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,37 +27,37 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 
 public class TelaPrincipal extends AppCompatActivity {
-
-    private List<Local> local;
-
-    private Spinner spin;
-    private EditText texto;
-    private Button botao;
-    private Locale loc = Locale.getDefault();
-
-    private TextView textoInternet;
-    private Button botaoInternet;
-
-    private ImageView imageInternet;
-
-
     private ListView sideMenu;
+
+
+
     private DrawerLayout  navLayout;
     private ActionBarDrawerToggle navDrawerToggle;
     private String navTitulo;
+
+    private List<Local> local = new LinkedList<Local>();
+
 
 
 
@@ -69,10 +73,9 @@ public class TelaPrincipal extends AppCompatActivity {
                 "Locais"
         };
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_principal);
-
-
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -82,319 +85,46 @@ public class TelaPrincipal extends AppCompatActivity {
 
         //textResult = (TextView) findViewById(R.id.result);
         final StringBuilder result = new StringBuilder();
-        spin = (Spinner) findViewById(R.id.criterios);
-        spin.requestFocus();
-        texto = (EditText) findViewById(R.id.valor);
-        botao = (Button) findViewById(R.id.pesq);
+
         sideMenu = (ListView) findViewById(R.id.lista_itens);
         sideMenu.setAdapter(new CustomList(this,navTitles,navImage));
 
         setupDrawer();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        setTitle(R.string.app_name);
 
 
-        textoInternet = (TextView) findViewById(R.id.textoInternet);
-        botaoInternet = (Button) findViewById(R.id.buttonInternet);
-        imageInternet = (ImageView) findViewById(R.id.imagemInternet);
+        FrameLayout frameFrag = (FrameLayout) findViewById(R.id.fragAtual);
+        Fragment frag = new FragmentoPrincipal();
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(frameFrag.getId(), frag).commit();
 
-        texto.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    Local res = null;
-                    List<Local> resL;
-                    if(!TextUtils.isEmpty(texto.getText().toString())){
-                        if(spin.getSelectedItemPosition() == 0){
-                            resL = new BuscaNome(local,texto.getText().toString()).busca();
-                            if(resL.isEmpty()){
-                                Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
-                                texto.setText("");
-                                texto.requestFocus();
-                            }
-                            else{
-                                Intent myIntent = new Intent(TelaPrincipal.this, TelaInformacoes.class);
-                                myIntent.putExtra("valor", resL.get(0));
-                                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                                startActivity(myIntent);
-                                finish();
-                            }
-                        }
-
-                        else if(spin.getSelectedItemPosition() == 1){
-                            resL = new BuscaTipo(local,texto.getText().toString()).busca();
-                            if(resL.isEmpty()){
-                                Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
-                                texto.setText("");
-                                texto.requestFocus();
-                            }
-                            else{
-                                Intent myIntent = new Intent(TelaPrincipal.this, TelaListaEncontrados.class);
-                                myIntent.putExtra("valor", (Serializable)resL);
-                                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                                startActivity(myIntent);
-                                finish();                            }
-                        }
-                        else if(spin.getSelectedItemPosition() == 2)
-                        {
-                            resL = new BuscaComida(local,texto.getText().toString()).busca();
-                            if(resL.isEmpty())
-                            {
-                                Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
-                                texto.setText("");
-                                texto.requestFocus();
-                            }
-                            else
-                            {
-                                Intent myIntent = new Intent(TelaPrincipal.this, TelaListaEncontrados.class);
-                                myIntent.putExtra("valor", (Serializable)resL);
-                                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                                startActivity(myIntent);
-                                finish();
-                            }
-                        }
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Digite um valor para pesquisa",Toast.LENGTH_SHORT).show();
-                        texto.requestFocus();
-                    }
-
-                    return true;
-                }
-                return false;
-            }
-        });
-
-
-
-
-
-
-
-        if(!isInternetAvailable())
-        {
-
-            spin.setVisibility(View.GONE);
-            texto.setVisibility(View.GONE);
-
-            botao.setVisibility(View.GONE);
-            textoInternet.setVisibility(View.VISIBLE);
-            botaoInternet.setVisibility(View.VISIBLE);
-            imageInternet.setVisibility(View.VISIBLE);
-
-        }
-        else
-        {
-            trazerDados();
-            spin.setVisibility(View.VISIBLE);
-            texto.setVisibility(View.VISIBLE);
-
-            botao.setVisibility(View.VISIBLE);
-
-            List<String> lista = Connection.getInstance().returnNames(local);
-
-            LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-            if(!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                // Build the alert dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Localização não ativada");
-                builder.setMessage("Para melhor experiência com o Find a Food ative o servico de Localização");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // Show location settings when the user acknowledges the alert dialog
-                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(intent);
-                    }
-                });
-                Dialog alertDialog = builder.create();
-                alertDialog.setCanceledOnTouchOutside(false);
-                alertDialog.show();
-            }
-
-            sideMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        sideMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    if(position == 1){
-                        Intent myIntent = new Intent(TelaPrincipal.this, TelaListaEncontrados.class);
-                        myIntent.putExtra("valor", (Serializable)trazerDados());
-                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                        startActivity(myIntent);
-                        finish();
-
+                    if(position == 0){
+                       navLayout.closeDrawer(sideMenu);
+                        FrameLayout frameFrag = (FrameLayout) findViewById(R.id.fragAtual);
+                        Fragment frag = new FragmentoPrincipal();
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(frameFrag.getId(), frag).commit();
                     }
-
-                    if(position == 0) navLayout.closeDrawer(sideMenu);
+                    else if (position == 1){
+                        navLayout.closeDrawer(sideMenu);
+                        TelaListaEncontrados tle = new TelaListaEncontrados ();
+                        Bundle args = new Bundle();
+                        args.putSerializable("valor",(Serializable)Connection.getInstance().getFound());
+                        tle.setArguments(args);
+                        getFragmentManager().beginTransaction().replace(R.id.fragAtual,tle).commit();
+                    }
 
                 }
             });
 
-
-
-
-
-
-
-
-
-
-
-        }
-
-
-
-
-
-
-
-
-
-
     }
-
-    public void onClick(View view) {
-        Local res = null;
-        List<Local> resL;
-        if(!TextUtils.isEmpty(texto.getText().toString())){
-            if(spin.getSelectedItemPosition() == 0){
-                resL = new BuscaNome(local,texto.getText().toString()).busca();
-                if(resL.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
-                    texto.setText("");
-                    texto.requestFocus();
-                }
-                else{
-                    Intent myIntent = new Intent(this, TelaInformacoes.class);
-                    myIntent.putExtra("valor", resL.get(0));
-                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                    startActivity(myIntent);
-                    finish();
-                }
-            }
-
-            else if(spin.getSelectedItemPosition() == 1){
-                resL = new BuscaTipo(local,texto.getText().toString()).busca();
-                if(resL.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
-                    texto.setText("");
-                    texto.requestFocus();
-                }
-                else{
-                    Intent myIntent = new Intent(this, TelaListaEncontrados.class);
-                    myIntent.putExtra("valor", (Serializable)resL);
-                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                    startActivity(myIntent);
-                    finish();
-                }
-            }
-            else if(spin.getSelectedItemPosition() == 2)
-            {
-                resL = new BuscaComida(local,texto.getText().toString()).busca();
-                if(resL.isEmpty())
-                {
-                    Toast.makeText(getApplicationContext(),"Nada encontrado",Toast.LENGTH_SHORT).show();
-                    texto.setText("");
-                    texto.requestFocus();
-                }
-                else
-                {
-                    Intent myIntent = new Intent(this, TelaListaEncontrados.class);
-                    myIntent.putExtra("valor", (Serializable)resL);
-                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                    startActivity(myIntent);
-                    finish();
-                }
-            }
-        }
-        else{
-            Toast.makeText(getApplicationContext(),"Digite um valor para pesquisa",Toast.LENGTH_SHORT).show();
-            texto.requestFocus();
-        }
-
-
-
-//        double [] dados = {-23.14426,-45.77867};
-//        Intent myIntent = new Intent(this, TelaMapa.class);
-//        myIntent.putExtra("valor",dados);
-//        this.startActivity(myIntent);
-
-
-    }
-
-    public void onClickInternet(View view)
-    {
-        final ProgressDialog progress = new ProgressDialog(this);
-
-        if(loc.getLanguage().equals("en"))
-        {
-            progress.setTitle("Connecting");
-            progress.setMessage("Please wait...");
-        }
-        else if(loc.getLanguage().equals("pt")){
-            progress.setTitle("Conectando");
-            progress.setMessage("Por Favor, aguarde...");
-        }
-        else if(loc.getLanguage().equals("es")){
-            progress.setTitle("Conectando");
-            progress.setMessage("Cargando...");
-        }
-
-        progress.show();
-
-        Runnable progressRunnable = new Runnable() {
-
-            @Override
-            public void run() {
-                progress.cancel();
-            }
-        };
-
-        Handler pdCanceller = new Handler();
-        pdCanceller.postDelayed(progressRunnable, 2000);
-        if(isInternetAvailable())
-        {
-
-            textoInternet.setVisibility(View.GONE);
-            botaoInternet.setVisibility(View.GONE);
-            imageInternet.setVisibility(View.GONE);
-
-            trazerDados();
-            spin.setVisibility(View.VISIBLE);
-            texto.setVisibility(View.VISIBLE);
-            botao.setVisibility(View.VISIBLE);
-            List<String> lista = Connection.getInstance().returnNames(local);
-
-        }
-    }
-
-
-
-
-
-    public boolean isInternetAvailable() {
-        try {
-            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
-            return !ipAddr.equals("");
-
-        } catch (Exception e) {
-            return false;
-        }
-
-    }
-
-    public List<Local> trazerDados()
-    {
-        try {
-            local=Connection.getInstance().sendGet();
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        finally {
-            return local;
-        }
-
-
-
+    public DrawerLayout getNavLayout() {
+        return navLayout;
     }
 
     @Override
@@ -435,9 +165,15 @@ public class TelaPrincipal extends AppCompatActivity {
         navDrawerToggle.syncState();
     }
 
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         navDrawerToggle.onConfigurationChanged(newConfig);
     }
+
+    public void setActionBarTitle(String title){
+        getActionBar().setTitle(title);
+    }
+
 }

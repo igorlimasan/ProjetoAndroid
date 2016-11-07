@@ -15,5 +15,41 @@
     <string name="textoInternet">Internet No Disponible</string>
     <string name="tentar">Intentar nuevamente</string>
     <string name="nav_open">Menu</string>
-    <string name="lista_cadastrados">Locais Cadastrados</string>
+    <string name="title_activity_tela_adicionar_local">Adicionar Local</string>
+    <string-array name="crit_add">
+        <item>Seleccione o  tipo</item>
+        <item>Nombre</item>
+        <item>Tipo</item>
+        <item>Comidas</item>
+    </string-array>
+    <string-array name="ufs">
+        <item>Seleccione el Estado</item>
+        <item>AC</item>
+        <item>AL</item>
+        <item>AM</item>
+        <item>AP</item>
+        <item>BA</item>
+        <item>CE</item>
+        <item>DF</item>
+        <item>ES</item>
+        <item>GO</item>
+        <item>MA</item>
+        <item>MG</item>
+        <item>MS</item>
+        <item>MT</item>
+        <item>PA</item>
+        <item>PB</item>
+        <item>PE</item>
+        <item>PI</item>
+        <item>PR</item>
+        <item>RJ</item>
+        <item>RN</item>
+        <item>RO</item>
+        <item>RR</item>
+        <item>RS</item>
+        <item>SC</item>
+        <item>SE</item>
+        <item>SP</item>
+        <item>TO</item>
+    </string-array>
 </resources>
