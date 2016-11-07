@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "747735044646",
+    "firebase_url": "https://projeto-android-fatec.firebaseio.com",
+    "project_id": "projeto-android-fatec",
+    "storage_bucket": "projeto-android-fatec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747735044646:android:85f394f2f2a03ae7",
+        "android_client_info": {
+          "package_name": "com.projeto.engsoft.projetoandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "747735044646-ucl05sl082go6l6of9g8ald6ua1n0m5p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.projeto.engsoft.projetoandroid",
+            "certificate_hash": "F34B76FBF66D1590D5F9F6FA1DB0A7FCB57CD469"
+          }
+        },
+        {
+          "client_id": "747735044646-17v5vh4867tn4qa7qgtst8qkpb6bi8v4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAbgkywehJsbYJruQnvS-xl8mXlhpbLLY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "747735044646-17v5vh4867tn4qa7qgtst8qkpb6bi8v4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
