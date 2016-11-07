@@ -164,12 +164,7 @@ public class TelaPrincipal extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
         navDrawerToggle.syncState();
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

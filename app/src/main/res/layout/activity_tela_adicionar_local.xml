@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.projeto.engsoft.projetoandroid.TelaAdicionarLocal">
+
+
+    <Button
+        android:text="Adicionar "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_local"
+        android:onClick="onClick"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/estado"
+        android:layout_marginBottom="35dp"
+        android:layout_alignEnd="@+id/estado" />
+
+    <Spinner
+        android:layout_width="100pt"
+        android:id="@+id/estado"
+        android:entries="@array/ufs"
+        android:spinnerMode="dialog"
+        android:layout_height="25pt"
+        android:layout_alignBottom="@+id/add_local"
+        android:layout_alignStart="@+id/tipo"
+        android:layout_marginBottom="61dp" />
+
+    <com.thomashaertel.widget.MultiSpinner
+        android:layout_width="100pt"
+        android:layout_height="25pt"
+        android:id="@+id/comidas"
+        android:spinnerMode="dialog"
+        android:layout_above="@+id/estado"
+        android:layout_marginBottom="11dp"
+        android:layout_alignEnd="@+id/estado" />
+
+    <Spinner
+        android:layout_width="100pt"
+        android:layout_height="25pt"
+        android:id="@+id/tipo"
+        android:spinnerMode="dialog"
+        android:layout_above="@+id/comidas"
+        android:layout_alignStart="@+id/cep"
+        android:layout_marginBottom="11dp" />
+
+    <com.github.pinball83.maskededittext.MaskedEditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:id="@+id/cep"
+        android:hint="CEP"
+        app:mask="*****-***"
+        app:notMaskedSymbol="*"
+        app:replacementChar = " "
+        app:deleteChar = " "
+        android:layout_above="@+id/tipo"
+        android:layout_alignStart="@+id/numero"
+        android:layout_marginBottom="11dp"
+        android:layout_alignEnd="@+id/numero" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/numero"
+        android:hint="Numero"
+        android:imeOptions="actionNext"
+        android:nextFocusDown="@id/cep"
+        android:layout_above="@+id/cep"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+            android:layout_height="50dp"
+            android:id="@+id/logradouro"
+            android:imeOptions="actionNext"
+            android:nextFocusDown="@id/numero"
+            android:inputType="text"
+            android:singleLine="true"
+            android:hint="Rua, Avenida, etc."
+        android:layout_width="350dp"
+        android:layout_above="@+id/numero"
+        android:layout_alignStart="@+id/nome"
+        android:layout_marginBottom="21dp" />
+
+    <EditText
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:inputType="text"
+        android:ems="10"
+        android:id="@+id/nome"
+        android:hint="Nome do Local"
+        android:selectAllOnFocus="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp" />
+
+</RelativeLayout>

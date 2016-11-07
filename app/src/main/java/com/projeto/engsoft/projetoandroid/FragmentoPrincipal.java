@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -61,6 +62,8 @@ public class FragmentoPrincipal extends  BaseFragment {
 
     private DrawerLayout navDrawerLayout;
 
+    FloatingActionButton fab;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,6 +93,15 @@ public class FragmentoPrincipal extends  BaseFragment {
             }
         });
         imageInternet = (ImageView) view.findViewById(R.id.imagemInternet);
+
+        fab = (FloatingActionButton) view.findViewById(R.id.addLocal);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getActivity(), TelaAdicionarLocal.class);
+                startActivity(myIntent);
+            }
+        });
 
         texto.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -154,6 +166,7 @@ public class FragmentoPrincipal extends  BaseFragment {
             spin.setVisibility(view.GONE);
             texto.setVisibility(view.GONE);
             botao.setVisibility(view.GONE);
+            fab.setVisibility(view.GONE);
             navDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 
@@ -167,6 +180,7 @@ public class FragmentoPrincipal extends  BaseFragment {
             spin.setVisibility(view.VISIBLE);
             texto.setVisibility(view.VISIBLE);
             botao.setVisibility(view.VISIBLE);
+            fab.setVisibility(view.VISIBLE);
             try {
                 local = Connection.getInstance().sendGet();
             } catch (Exception e) {
@@ -320,6 +334,7 @@ public class FragmentoPrincipal extends  BaseFragment {
             spin.setVisibility(View.VISIBLE);
             texto.setVisibility(View.VISIBLE);
             botao.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.VISIBLE);
             navDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             LocationManager lm = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
             if (!lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
