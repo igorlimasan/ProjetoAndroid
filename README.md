@@ -9,6 +9,10 @@
 <img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/Screenshot_20161003-095354.png" width=400><br>
 <b><h1>Aviso Internet desativada</h1></b><p>
 <img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/Screenshot_20161003-095405.png" width=400)><br>
+<b><h1>Navigation drawer</h1></b><p>
+<img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/Screenshot_2016-11-28-21-12-35.png" width=400)><br>
+<b><h1>Adicionar Local</h1></b><p>
+<img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/Screenshot_2016-11-28-21-12-48.png" width=400)><br>
 <b><h1>Diagrama de Classe</h1></b><p>
 <img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/GPS_Diag_Classe_OFI.jpg" width=750)><br>
 
