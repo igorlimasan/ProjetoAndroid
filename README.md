@@ -14,7 +14,7 @@
 <b><h1>Adicionar Local</h1></b><p>
 <img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/Screenshot_2016-11-28-21-12-48.png" width=400)><br>
 <b><h1>Diagrama de Classe</h1></b><p>
-<img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/GPS_Diag_Classe_OFI.jpg" width=750)><br>
+<img src="https://github.com/igorlimasan/ProjetoAndroid/blob/master/prints/Diagrama_Oficial_parte%202.jpg" width=750)><br>
 
 
 
